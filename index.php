@@ -30,7 +30,7 @@ Flight::route("GET /api/v1/oauth", function () use ($config) {
     ]);
 
     $responseData = json_decode((string)$response->getBody(), true);
-    
+
     if (isset($responseData["access_token"])) {
         echo "I don't really care about the access token but Slack gave me this one: {$responseData["access_token"]}. The app should now work in your team.";
     } else {
@@ -52,6 +52,10 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
 
 Flight::route("GET /api/v1/ping", function () {
     echo "Pong.";
+});
+
+Flight::route("/", function () {
+    Flight::render("index.view.php", "/view");
 });
 
 Flight::route("error", function (Exception $ex) use ($errorHandler) {
