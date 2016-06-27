@@ -1,0 +1,21 @@
+{
+  "name": "jmesserli/slack-publictransport",
+  "description": "REST API for a Slack App which provides public transport information for Switzerland",
+  "minimum-stability": "beta",
+  "license": "GNU GPLv3",
+  "authors": [
+    {
+      "name": "Joel Messerli",
+      "email": "joel@jmnw.me"
+    }
+  ],
+  "require": {
+    "mikecao/flight": "v1.2.21",
+    "guzzlehttp/guzzle": "6.2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "PegNu\\": "/"
+    }
+  }
+}
