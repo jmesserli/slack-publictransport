@@ -28,7 +28,7 @@ class TransportAPI
             ]
         ]);
 
-        $responseData = json_decode($response->getBody());
+        $responseData = json_decode((string)$response->getBody());
         $stations = [];
 
         foreach ($responseData["stations"] as $station)

@@ -3,10 +3,10 @@
 use PegNu\Api\TransportAPI;
 use GuzzleHttp\Client;
 
-$ravenClient = new Raven_Client("https://9817e9f9f8a74e1489505203038ac8ee:9a72980301d348b4943e3ee1b5d39a3d@sentry.peg.nu/3");
-$errorHandler = new Raven_ErrorHandler($ravenClient);
-
 $config = require("config.php");
+
+$ravenClient = new Raven_Client($config["sentry_dsn"]);
+$errorHandler = new Raven_ErrorHandler($ravenClient);
 
 // OAuth endpoint
 Flight::route("GET /api/v1/oauth", function () use ($config) {
@@ -29,7 +29,7 @@ Flight::route("GET /api/v1/oauth", function () use ($config) {
         ]
     ]);
 
-    $responseData = json_decode($response->getBody());
+    $responseData = json_decode((string)$response->getBody());
 
     if (isset($responseData["access_token"])) {
         echo "I don't really care about the access token but Slack gave me this one: {$responseData["access_token"]}. The app should now work in your team.";
