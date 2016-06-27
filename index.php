@@ -5,9 +5,6 @@ use GuzzleHttp\Client;
 
 $ravenClient = new Raven_Client("https://9817e9f9f8a74e1489505203038ac8ee:9a72980301d348b4943e3ee1b5d39a3d@sentry.peg.nu/3");
 $errorHandler = new Raven_ErrorHandler($ravenClient);
-$errorHandler->registerExceptionHandler();
-$errorHandler->registerErrorHandler();
-$errorHandler->registerShutdownFunction();
 
 $config = require("config.php");
 
@@ -55,6 +52,12 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
 
 Flight::route("GET /api/v1/ping", function () {
     echo "Pong.";
+});
+
+Flight::route("error", function (Exception $ex) use ($errorHandler) {
+    $errorHandler->handleException($ex, true, Flight::request());
+
+    Flight::json(["status" => "error", "error" => "Internal Server Error"], 500);
 });
 
 // *** important ***
