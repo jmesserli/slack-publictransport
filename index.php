@@ -51,3 +51,6 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
 Flight::route("GET /api/v1/ping", function () {
     echo "Pong.";
 });
+
+// *** important ***
+Flight::start();
