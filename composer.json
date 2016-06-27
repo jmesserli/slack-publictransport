@@ -11,7 +11,8 @@
   ],
   "require": {
     "mikecao/flight": "v1.2.21",
-    "guzzlehttp/guzzle": "6.2.0"
+    "guzzlehttp/guzzle": "6.2.0",
+    "sentry/sentry": "0.22.0"
   },
   "autoload": {
     "psr-4": {
