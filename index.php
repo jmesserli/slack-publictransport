@@ -1,6 +1,6 @@
 <?php require __DIR__ . "/vendor/autoload.php";
 
-use PegNu\TransportAPI;
+use PegNu\Api\TransportAPI;
 use GuzzleHttp\Client;
 
 $config = require("config.php");
@@ -44,5 +44,10 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
         Flight::json(["status" => "error", "error" => "Unauthorized"], 401);
 
     // From this point on we know the request is coming from slack and valid
+    $transportApi = new TransportAPI();
 
+});
+
+Flight::route("GET /api/v1/ping", function () {
+    echo "Pong.";
 });
