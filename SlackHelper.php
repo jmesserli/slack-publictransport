@@ -43,12 +43,12 @@ class SlackHelper
             ],
         ];
 
-        // Create hash for temporary saving in apc
+        // Create hash for temporary saving in apcu
         $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
         $message['callback_id'] = $hash;
 
-        $apc_store = [
+        $apcu_store = [
             'type' => 'locationCorrection',
             'data' => [
                 'from'      => $from,
@@ -60,7 +60,7 @@ class SlackHelper
         ];
 
         // TTL 300s = 60s * 5 = 5 min
-        apc_store($hash, $apc_store, 300);
+        apcu_store($hash, $apcu_store, 300);
 
         return $message;
     }

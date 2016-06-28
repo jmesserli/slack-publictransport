@@ -90,7 +90,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     }
 
     $connections = $transportApi->getConnections($locations_from[0], $locations_to[0], isset($parsedParams[2]) ? $parsedParams[2] : null, false);
-    // TODO Transform connection data and set APC
+    // TODO Transform connection data and set APCU
 
     Flight::json($connections);
 });
