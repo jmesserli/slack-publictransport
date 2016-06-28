@@ -2,7 +2,7 @@
 
 namespace PegNu\Api\Model;
 
-class Section
+class Section extends Model
 {
     /**
      * @var Journey
@@ -34,19 +34,19 @@ class Section
      */
     public function __construct(Journey $journey, $walk, Checkpoint $departure, Checkpoint $arrival)
     {
-        $this->journey = $journey;
-        $this->walk = $walk;
+        $this->journey   = $journey;
+        $this->walk      = $walk;
         $this->departure = $departure;
-        $this->arrival = $arrival;
+        $this->arrival   = $arrival;
     }
 
     public static function fromJson($section)
     {
         return new self(
-            Journey::fromJson($section['journey']),
-            $section['walk'],
-            Checkpoint::fromJson($section['departure']),
-            Checkpoint::fromJson($section['arrival'])
+            Journey::fromJson(self::tryGetField($section, "journey", [])),
+            self::tryGetField($section, "walk"),
+            Checkpoint::fromJson(self::tryGetField($section, "departure")),
+            Checkpoint::fromJson(self::tryGetField($section, "arrival"))
         );
     }
 }

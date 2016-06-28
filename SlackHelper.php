@@ -20,6 +20,7 @@ class SlackHelper
 
         $actions = [];
 
+        // Generate actions
         foreach ($passedLocations as $key => $location) {
             $actions[] = [
                 'name'  => 'location',
@@ -30,18 +31,20 @@ class SlackHelper
             ];
         }
 
+        // Generate message with actions
         $message = [
-            'text'        => "Für _{$unclearLocation}_ gibt es verschiedene Möglichkeiten",
+            'text'        => "FÃ¼r _{$unclearLocation}_ gibt es verschiedene MÃ¶glichkeiten",
             'attachments' => [
                 [
-                    'text'    => 'Bitte wähle die gewünschte Station:',
+                    'text'    => 'Bitte wÃ¤hle die gewÃ¼nschte Station:',
                     'color'   => '#0af',
                     'actions' => $actions,
                 ],
             ],
         ];
 
-        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
+        // Create hash for temporary saving in apc
+        $hash = hash('sha256', json_encode($message) . (new \DateTime())->getTimestamp());
 
         $message['callback_id'] = $hash;
 
@@ -56,7 +59,8 @@ class SlackHelper
             ],
         ];
 
-        apc_store($hash, $apc_store);
+        // TTL 300s = 60s * 5 = 5 min
+        apc_store($hash, $apc_store, 300);
 
         return $message;
     }

@@ -2,7 +2,7 @@
 
 namespace PegNu\Api\Model;
 
-class Prognosis
+class Prognosis extends Model
 {
     /**
      * @var string
@@ -40,9 +40,9 @@ class Prognosis
      */
     public function __construct($platform, $departure, $arrival, $capacity1st, $capacity2nd)
     {
-        $this->platform = $platform;
-        $this->departure = $departure;
-        $this->arrival = $arrival;
+        $this->platform    = $platform;
+        $this->departure   = $departure;
+        $this->arrival     = $arrival;
         $this->capacity1st = $capacity1st;
         $this->capacity2nd = $capacity2nd;
     }
@@ -50,11 +50,11 @@ class Prognosis
     public static function fromJson($prognosis)
     {
         return new self(
-            $prognosis['platform'],
-            $prognosis['departure'],
-            $prognosis['arrival'],
-            $prognosis['capacity1st'],
-            $prognosis['capacity2nd']
+            self::tryGetField($prognosis, "platform"),
+            self::tryGetField($prognosis, "departure"),
+            self::tryGetField($prognosis, "arrival"),
+            self::tryGetField($prognosis, "capacity1st"),
+            self::tryGetField($prognosis, "capacity2nd")
         );
     }
 }

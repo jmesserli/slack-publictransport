@@ -2,7 +2,7 @@
 
 namespace PegNu\Api\Model;
 
-class Service
+class Service extends Model
 {
     /**
      * @var string
@@ -22,15 +22,15 @@ class Service
      */
     public function __construct($regular, $irregular)
     {
-        $this->regular = $regular;
+        $this->regular   = $regular;
         $this->irregular = $irregular;
     }
 
     public static function fromJson($service)
     {
         return new self(
-            $service['regular'],
-            $service['irregular']
+            self::tryGetField($service, "regular"),
+            self::tryGetField($service, "irregular")
         );
     }
 }

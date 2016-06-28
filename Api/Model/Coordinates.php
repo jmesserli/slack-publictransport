@@ -2,7 +2,7 @@
 
 namespace PegNu\Api\Model;
 
-class Coordinates
+class Coordinates extends Model
 {
     /**
      * @var string
@@ -29,16 +29,16 @@ class Coordinates
     public function __construct($type, $x, $y)
     {
         $this->type = $type;
-        $this->x = $x;
-        $this->y = $y;
+        $this->x    = $x;
+        $this->y    = $y;
     }
 
     public static function fromJson($coordinates)
     {
         return new self(
-            $coordinates['type'],
-            $coordinates['x'],
-            $coordinates['y']
+            self::tryGetField($coordinates, "type"),
+            self::tryGetField($coordinates, "x"),
+            self::tryGetField($coordinates, "y")
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use PegNu\Api\TransportAPI;
@@ -9,7 +9,7 @@ use PegNu\SlackHelper;
 $config = require 'config.php';
 
 // Sentry Error Reporting
-$ravenClient = new Raven_Client($config['sentry_dsn']);
+$ravenClient  = new Raven_Client($config['sentry_dsn']);
 $errorHandler = new Raven_ErrorHandler($ravenClient);
 
 Flight::route('GET /api/v1/oauth', function () use ($config) {
@@ -21,9 +21,7 @@ Flight::route('GET /api/v1/oauth', function () use ($config) {
     }
 
     // Get access token
-    $restClient = new Client([
-        'base_uri' => 'https://slack.com/api/',
-    ]);
+    $restClient = new Client(['base_uri' => 'https://slack.com/api/']);
 
     $response = $restClient->request('POST', 'oauth.access', [
         'form_params' => [
@@ -71,13 +69,12 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
         exit;
     }
 
-    $transportApi = new TransportAPI();
+    $transportApi   = new TransportAPI();
     $locations_from = $transportApi->queryLocations($parsedParams[0]);
-    $locations_to = $transportApi->queryLocations($parsedParams[1]);
-    $time = isset($parsedParams[2]) ? $parsedParams[2] : null;
+    $locations_to   = $transportApi->queryLocations($parsedParams[1]);
+    $time           = isset($parsedParams[2]) ? $parsedParams[2] : null;
 
     // Ask for exact location
-
     if (count($locations_from) > 1) {
         Flight::json(SlackHelper::makeLocationConfirmMessage($locations_from, $parsedParams[0], $locations_from, $locations_to, $time));
     } elseif (count($locations_from) == 0) {
