@@ -1,40 +1,42 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Checkpoint
 {
     /**
-     * @var $station Location
+     * @var Location
      */
     public $station;
 
     /**
-     * @var $arrival string|null
+     * @var string|null
      */
     public $arrival;
 
     /**
-     * @var $departure string|null
+     * @var string|null
      */
     public $departure;
 
     /**
-     * @var $platform string
+     * @var string
      */
     public $platform;
 
     /**
-     * @var $prognosis Prognosis
+     * @var Prognosis
      */
     public $prognosis;
 
     /**
      * Checkpoint constructor.
-     * @param Location $station
+     *
+     * @param Location    $station
      * @param null|string $arrival
      * @param null|string $departure
-     * @param string $platform
-     * @param Prognosis $prognosis
+     * @param string      $platform
+     * @param Prognosis   $prognosis
      */
     public function __construct(Location $station, $arrival, $departure, $platform, Prognosis $prognosis)
     {
@@ -47,12 +49,12 @@ class Checkpoint
 
     public static function fromJson($checkpoint)
     {
-        return new Checkpoint(
-            Location::fromJson($checkpoint["station"]),
-            $checkpoint["arrival"],
-            $checkpoint["departure"],
-            $checkpoint["platform"],
-            Prognosis::fromJson($checkpoint["prognosis"])
+        return new self(
+            Location::fromJson($checkpoint['station']),
+            $checkpoint['arrival'],
+            $checkpoint['departure'],
+            $checkpoint['platform'],
+            Prognosis::fromJson($checkpoint['prognosis'])
         );
     }
 }

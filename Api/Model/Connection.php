@@ -5,55 +5,56 @@ namespace PegNu\Api\Model;
 class Connection
 {
     /**
-     * @var $from Checkpoint
+     * @var Checkpoint
      */
     public $from;
 
     /**
-     * @var $to Checkpoint
+     * @var Checkpoint
      */
     public $to;
 
     /**
-     * @var $duration string
+     * @var string
      */
     public $duration;
 
     /**
-     * @var $service Service
+     * @var Service
      */
     public $service;
 
     /**
-     * @var $products string[]
+     * @var string[]
      */
     public $products;
 
     /**
-     * @var $capacity1st string
+     * @var string
      */
     public $capacity1st;
 
     /**
-     * @var $capacity2nd string
+     * @var string
      */
     public $capacity2nd;
 
     /**
-     * @var $sections Section[]
+     * @var Section[]
      */
     public $sections;
 
     /**
      * Connection constructor.
+     *
      * @param Checkpoint $from
      * @param Checkpoint $to
-     * @param string $duration
-     * @param Service $service
-     * @param \string[] $products
-     * @param string $capacity1st
-     * @param string $capacity2nd
-     * @param Section[] $sections
+     * @param string     $duration
+     * @param Service    $service
+     * @param \string[]  $products
+     * @param string     $capacity1st
+     * @param string     $capacity2nd
+     * @param Section[]  $sections
      */
     public function __construct(Checkpoint $from, Checkpoint $to, $duration, Service $service, array $products, $capacity1st, $capacity2nd, array $sections)
     {
@@ -71,17 +72,18 @@ class Connection
     {
         $sections = [];
 
-        foreach ($phpArray["sections"] as $section)
+        foreach ($phpArray['sections'] as $section) {
             $sections[] = Section::fromJson($section);
+        }
 
-        return new Connection(
-            Checkpoint::fromJson($phpArray["from"]),
-            Checkpoint::fromJson($phpArray["to"]),
-            $phpArray["duration"],
-            Service::fromJson($phpArray["service"]),
-            $phpArray["products"],
-            $phpArray["capacity1st"],
-            $phpArray["capacity2nd"],
+        return new self(
+            Checkpoint::fromJson($phpArray['from']),
+            Checkpoint::fromJson($phpArray['to']),
+            $phpArray['duration'],
+            Service::fromJson($phpArray['service']),
+            $phpArray['products'],
+            $phpArray['capacity1st'],
+            $phpArray['capacity2nd'],
             $sections
         );
     }

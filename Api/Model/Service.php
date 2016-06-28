@@ -1,20 +1,22 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Service
 {
     /**
-     * @var $regular string
+     * @var string
      */
     public $regular;
 
     /**
-     * @var $irregular string
+     * @var string
      */
     public $irregular;
 
     /**
      * Service constructor.
+     *
      * @param string $regular
      * @param string $irregular
      */
@@ -26,9 +28,9 @@ class Service
 
     public static function fromJson($service)
     {
-        return new Service(
-            $service["regular"],
-            $service["irregular"]
+        return new self(
+            $service['regular'],
+            $service['irregular']
         );
     }
 }

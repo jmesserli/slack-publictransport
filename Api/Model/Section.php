@@ -1,34 +1,36 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Section
 {
     /**
-     * @var $journey Journey
+     * @var Journey
      */
     public $journey;
 
     /**
-     * @var $walk string|null
+     * @var string|null
      */
     public $walk;
 
     /**
-     * @var  $departure Checkpoint
+     * @var Checkpoint
      */
     public $departure;
 
     /**
-     * @var $arrival Checkpoint
+     * @var Checkpoint
      */
     public $arrival;
 
     /**
      * Section constructor.
-     * @param Journey $journey
+     *
+     * @param Journey     $journey
      * @param null|string $walk
-     * @param Checkpoint $departure
-     * @param Checkpoint $arrival
+     * @param Checkpoint  $departure
+     * @param Checkpoint  $arrival
      */
     public function __construct(Journey $journey, $walk, Checkpoint $departure, Checkpoint $arrival)
     {
@@ -40,11 +42,11 @@ class Section
 
     public static function fromJson($section)
     {
-        return new Section(
-            Journey::fromJson($section["journey"]),
-            $section["walk"],
-            Checkpoint::fromJson($section["departure"]),
-            Checkpoint::fromJson($section["arrival"])
+        return new self(
+            Journey::fromJson($section['journey']),
+            $section['walk'],
+            Checkpoint::fromJson($section['departure']),
+            Checkpoint::fromJson($section['arrival'])
         );
     }
 }
