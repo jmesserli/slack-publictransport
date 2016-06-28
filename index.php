@@ -85,7 +85,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     if (count($locations_to) > 1) {
         Flight::json(SlackHelper::makeLocationConfirmMessage($locations_to, $parsedParams[1], $locations_from, $locations_to, $time));
     } elseif (count($locations_to) == 0) {
-        echo "Ich kann mit _{$parsedParams[0]}_ keine Station finden";
+        echo "Ich kann mit _{$parsedParams[1]}_ keine Station finden";
         exit;
     }
 
