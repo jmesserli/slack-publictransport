@@ -7,29 +7,30 @@ use PegNu\Api\Model\Location;
 class SlackHelper
 {
     /**
-     * @param Location[] $locations
-     */
-    public static function makeLocationConfirmMessage(array $locations)
+	 * @param Location[] $locations
+	 * @return array
+	 */
+    public static function makeLocationConfirmMessage(array $locations, $unclearLocation, $from, $to, $time)
     {
         /*
-         * @var Location[]
-         */
+		 * @var Location[]
+		 */
         $passedLocations = array_slice($locations, 0, 4, true);
 
         $actions = [];
 
-        foreach ($passedLocations as $location) {
+        foreach ($passedLocations as $key => $location) {
             $actions[] = [
                 'name'  => 'location',
                 'text'  => $location->name,
                 'type'  => 'button',
                 'value' => $location->id,
-                'style' => 'primary', // TODO
+                'style' => $key == 0 ? 'primary' : 'default',
             ];
         }
 
         $message = [
-            'text'        => 'Für _..._ gibt es verschiedene Möglichkeiten',
+            'text'        => "Für _{$unclearLocation}_ gibt es verschiedene Möglichkeiten",
             'attachments' => [
                 [
                     'text'    => 'Bitte wähle die gewünschte Station:',
@@ -39,6 +40,23 @@ class SlackHelper
             ],
         ];
 
-        // TODO apc, return
+		$hash = hash("sha256", json_encode($message) . (new \DateTime)->getTimestamp());
+
+		$message["callback_id"] = $hash;
+
+		$apc_store = [
+			"type" => "locationCorrection",
+			"data" => [
+				"from" => $from,
+				"to" => $to,
+				"time" => $time,
+				"locations" => $locations,
+				"message" => $message
+			]
+		];
+
+		apc_store($hash, $apc_store);
+
+		return $message;
     }
 }

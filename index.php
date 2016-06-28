@@ -4,6 +4,7 @@ require __DIR__.'/vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use PegNu\Api\TransportAPI;
+use PegNu\SlackHelper;
 
 $config = require 'config.php';
 
@@ -66,23 +67,30 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     }
 
     if (count($parsedParams) < 2) {
-    } // TODO Error & Exit
+		echo "Du musst mindestens den Abfahrts- und Ankunftsort mitgeben.";
+		exit;
+    }
 
     $transportApi = new TransportAPI();
     $locations_from = $transportApi->queryLocations($parsedParams[0]);
     $locations_to = $transportApi->queryLocations($parsedParams[1]);
+	$time = isset($parsedParams[2]) ? $parsedParams[2] : null;
 
     // Ask for exact location
 
     if (count($locations_from) > 1) {
-    } // TODO ask to choose location
-    elseif (count($locations_from) == 0) {
-    } // TODO cancel and ask for better location
+		Flight::json(SlackHelper::makeLocationConfirmMessage($locations_from, $parsedParams[0], $locations_from, $locations_to, $time));
+	} elseif (count($locations_from) == 0) {
+		echo "Ich kann mit _{$parsedParams[0]}_ keine Station finden";
+		exit;
+    }
 
     if (count($locations_to) > 1) {
-    } // TODO ask to choose location
-    elseif (count($locations_to) == 0) {
-    } // TODO cancel and ask for better location
+		Flight::json(SlackHelper::makeLocationConfirmMessage($locations_to, $parsedParams[1], $locations_from, $locations_to, $time));
+    } elseif (count($locations_to) == 0) {
+		echo "Ich kann mit _{$parsedParams[0]}_ keine Station finden";
+		exit;
+	}
 
     $connections = $transportApi->getConnections($locations_from[0], $locations_to[0], isset($parsedParams[2]) ? $parsedParams[2] : null, false);
     // TODO Transform connection data and set APC
