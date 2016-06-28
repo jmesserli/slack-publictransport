@@ -44,7 +44,7 @@ class SlackHelper
         ];
 
         // Create hash for temporary saving in apc
-        $hash = hash('sha256', json_encode($message) . (new \DateTime())->getTimestamp());
+        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
         $message['callback_id'] = $hash;
 

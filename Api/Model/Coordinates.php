@@ -29,16 +29,16 @@ class Coordinates extends Model
     public function __construct($type, $x, $y)
     {
         $this->type = $type;
-        $this->x    = $x;
-        $this->y    = $y;
+        $this->x = $x;
+        $this->y = $y;
     }
 
     public static function fromJson($coordinates)
     {
         return new self(
-            self::tryGetField($coordinates, "type"),
-            self::tryGetField($coordinates, "x"),
-            self::tryGetField($coordinates, "y")
+            self::tryGetField($coordinates, 'type'),
+            self::tryGetField($coordinates, 'x'),
+            self::tryGetField($coordinates, 'y')
         );
     }
 }

@@ -46,23 +46,23 @@ class Stop extends Model
      */
     public function __construct(Location $station, $name, $category, $number, $operator, $to)
     {
-        $this->station  = $station;
-        $this->name     = $name;
+        $this->station = $station;
+        $this->name = $name;
         $this->category = $category;
-        $this->number   = $number;
+        $this->number = $number;
         $this->operator = $operator;
-        $this->to       = $to;
+        $this->to = $to;
     }
 
     public static function fromJson($stop)
     {
         return new self(
-            Location::fromJson(self::tryGetField($stop, "station", [])),
-            self::tryGetField($stop, "name"),
-            self::tryGetField($stop, "category"),
-            self::tryGetField($stop, "number"),
-            self::tryGetField($stop, "operator"),
-            self::tryGetField($stop, "to")
+            Location::fromJson(self::tryGetField($stop, 'station', [])),
+            self::tryGetField($stop, 'name'),
+            self::tryGetField($stop, 'category'),
+            self::tryGetField($stop, 'number'),
+            self::tryGetField($stop, 'operator'),
+            self::tryGetField($stop, 'to')
         );
     }
 }
