@@ -1,65 +1,66 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Journey
 {
-
     /**
-     * @var $name string
+     * @var string
      */
     public $name;
 
     /**
-     * @var $category string
+     * @var string
      */
     public $category;
 
     /**
-     * @var $categoryCode int
+     * @var int
      */
     public $categoryCode;
 
     /**
-     * @var $number string
+     * @var string
      */
     public $number;
 
     /**
-     * @var $operator string
+     * @var string
      */
     public $operator;
 
     /**
-     * @var $to string
+     * @var string
      */
     public $to;
 
     /**
-     * @var $passList Checkpoint[]
+     * @var Checkpoint[]
      */
     public $passList;
 
     /**
-     * @var $capacity1st int
+     * @var int
      */
     public $capacity1st;
 
     /**
-     * @var $capacity2nd int
+     * @var int
      */
     public $capacity2nd;
 
     /**
      * Journey constructor.
-     * @param string $name
-     * @param string $category
-     * @param int $categoryCode
-     * @param string $number
-     * @param string $operator
-     * @param string $to
+     *
+     * @param string       $name
+     * @param string       $category
+     * @param int          $categoryCode
+     * @param string       $number
+     * @param string       $operator
+     * @param string       $to
      * @param Checkpoint[] $passList
-     * @param int $capacity1st
-     * @param int $capacity2nd
+     * @param int          $capacity1st
+     * @param int          $capacity2nd
      */
     public function __construct($name, $category, $categoryCode, $number, $operator, $to, array $passList, $capacity1st, $capacity2nd)
     {
@@ -78,19 +79,20 @@ class Journey
     {
         $checkpoints[] = [];
 
-        foreach ($journey["passList"] as $checkpoint)
+        foreach ($journey['passList'] as $checkpoint) {
             $checkpoints[] = Checkpoint::fromJson($checkpoint);
+        }
 
-        return new Journey(
-            $journey["name"],
-            $journey["category"],
-            $journey["categoryCode"],
-            $journey["number"],
-            $journey["operator"],
-            $journey["to"],
+        return new self(
+            $journey['name'],
+            $journey['category'],
+            $journey['categoryCode'],
+            $journey['number'],
+            $journey['operator'],
+            $journey['to'],
             $checkpoints,
-            $journey["capacity1st"],
-            $journey["capacity2nd"]
+            $journey['capacity1st'],
+            $journey['capacity2nd']
         );
     }
 }

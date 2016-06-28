@@ -1,46 +1,48 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Stop
 {
     /**
-     * @var $station Location
+     * @var Location
      */
     public $station;
 
     /**
-     * @var $name string
+     * @var string
      */
     public $name;
 
     /**
-     * @var $category string
+     * @var string
      */
     public $category;
 
     /**
-     * @var $number int
+     * @var int
      */
     public $number;
 
     /**
-     * @var $operator string
+     * @var string
      */
     public $operator;
 
     /**
-     * @var $to string
+     * @var string
      */
     public $to;
 
     /**
      * Stop constructor.
+     *
      * @param Location $station
-     * @param string $name
-     * @param string $category
-     * @param int $number
-     * @param string $operator
-     * @param string $to
+     * @param string   $name
+     * @param string   $category
+     * @param int      $number
+     * @param string   $operator
+     * @param string   $to
      */
     public function __construct(Location $station, $name, $category, $number, $operator, $to)
     {
@@ -54,14 +56,13 @@ class Stop
 
     public static function fromJson($stop)
     {
-        return new Stop(
-            Location::fromJson($stop["station"]),
-            $stop["name"],
-            $stop["category"],
-            $stop["number"],
-            $stop["operator"],
-            $stop["to"]
+        return new self(
+            Location::fromJson($stop['station']),
+            $stop['name'],
+            $stop['category'],
+            $stop['number'],
+            $stop['operator'],
+            $stop['to']
         );
     }
-
 }

@@ -1,40 +1,42 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Prognosis
 {
     /**
-     * @var $platform string
+     * @var string
      */
     public $platform;
 
     /**
-     * @var $departure string
+     * @var string
      */
     public $departure;
 
     /**
-     * @var $arrival string
+     * @var string
      */
     public $arrival;
 
     /**
-     * @var $capacity1st int
+     * @var int
      */
     public $capacity1st;
 
     /**
-     * @var $capacity2nd int
+     * @var int
      */
     public $capacity2nd;
 
     /**
      * Prognosis constructor.
+     *
      * @param string $platform
      * @param string $departure
      * @param string $arrival
-     * @param int $capacity1st
-     * @param int $capacity2nd
+     * @param int    $capacity1st
+     * @param int    $capacity2nd
      */
     public function __construct($platform, $departure, $arrival, $capacity1st, $capacity2nd)
     {
@@ -47,12 +49,12 @@ class Prognosis
 
     public static function fromJson($prognosis)
     {
-        return new Prognosis(
-            $prognosis["platform"],
-            $prognosis["departure"],
-            $prognosis["arrival"],
-            $prognosis["capacity1st"],
-            $prognosis["capacity2nd"]
+        return new self(
+            $prognosis['platform'],
+            $prognosis['departure'],
+            $prognosis['arrival'],
+            $prognosis['capacity1st'],
+            $prognosis['capacity2nd']
         );
     }
 }

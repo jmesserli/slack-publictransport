@@ -1,46 +1,48 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Location
 {
     /**
-     * @var $id string
+     * @var string
      */
     public $id;
 
     /**
-     * @var $type string
+     * @var string
      */
     public $type;
 
     /**
-     * @var $name string
+     * @var string
      */
     public $name;
 
     /**
-     * @var $score int
+     * @var int
      */
     public $score;
 
     /**
-     * @var $coordinates Coordinates
+     * @var Coordinates
      */
     public $coordinates;
 
     /**
-     * @var $distance string
+     * @var string
      */
     public $distance;
 
     /**
      * Location constructor.
-     * @param string $id
-     * @param string $type
-     * @param string $name
-     * @param int $score
+     *
+     * @param string      $id
+     * @param string      $type
+     * @param string      $name
+     * @param int         $score
      * @param Coordinates $coordinates
-     * @param string $distance
+     * @param string      $distance
      */
     public function __construct($id, $type, $name, $score, Coordinates $coordinates, $distance)
     {
@@ -54,13 +56,13 @@ class Location
 
     public static function fromJson($location)
     {
-        return new Location(
-            $location["id"],
-            $location["type"],
-            $location["name"],
-            $location["score"],
-            Coordinates::fromJson($location["coordinates"]),
-            $location["distance"]
+        return new self(
+            $location['id'],
+            $location['type'],
+            $location['name'],
+            $location['score'],
+            Coordinates::fromJson($location['coordinates']),
+            $location['distance']
         );
     }
 }

@@ -1,26 +1,27 @@
 <?php
+
 namespace PegNu\Api\Model;
 
 class Coordinates
 {
-
     /**
-     * @var string $type
+     * @var string
      */
     public $type;
 
     /**
-     * @var string $x
+     * @var string
      */
     public $x;
 
     /**
-     * @var string $y
+     * @var string
      */
     public $y;
 
     /**
      * Coordinates constructor.
+     *
      * @param string $type
      * @param string $x
      * @param string $y
@@ -34,10 +35,10 @@ class Coordinates
 
     public static function fromJson($coordinates)
     {
-        return new Coordinates(
-            $coordinates["type"],
-            $coordinates["x"],
-            $coordinates["y"]
+        return new self(
+            $coordinates['type'],
+            $coordinates['x'],
+            $coordinates['y']
         );
     }
 }
