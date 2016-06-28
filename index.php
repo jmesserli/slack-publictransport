@@ -6,10 +6,10 @@ use GuzzleHttp\Client;
 
 $config = require("config.php");
 
+// Sentry Error Reporting
 $ravenClient = new Raven_Client($config["sentry_dsn"]);
 $errorHandler = new Raven_ErrorHandler($ravenClient);
 
-// OAuth endpoint
 Flight::route("GET /api/v1/oauth", function () use ($config) {
 	$request = Flight::request();
 
@@ -39,7 +39,6 @@ Flight::route("GET /api/v1/oauth", function () use ($config) {
 	}
 });
 
-// Connections endpoint
 Flight::route("POST /api/v1/connections", function () use ($config) {
 	$request = Flight::request();
 
@@ -88,7 +87,7 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
 	Flight::json($connections);
 });
 
-Flight::route("/api/v1/interactive", function() use ($config) {
+Flight::route("POST /api/v1/interactive", function() use ($config) {
 	$request = Flight::request();
 
 	$token = $request->data->token;
