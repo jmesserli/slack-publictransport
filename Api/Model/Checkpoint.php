@@ -40,20 +40,20 @@ class Checkpoint extends Model
      */
     public function __construct(Location $station, $arrival, $departure, $platform, Prognosis $prognosis)
     {
-        $this->station   = $station;
-        $this->arrival   = $arrival;
+        $this->station = $station;
+        $this->arrival = $arrival;
         $this->departure = $departure;
-        $this->platform  = $platform;
+        $this->platform = $platform;
         $this->prognosis = $prognosis;
     }
 
     public static function fromJson($checkpoint)
     {
         return new self(
-            Location::fromJson(self::tryGetField($checkpoint, "station", [])),
-            self::tryGetField($checkpoint, "arrival"),
-            self::tryGetField($checkpoint, "departure"),
-            self::tryGetField($checkpoint, "platform"),
+            Location::fromJson(self::tryGetField($checkpoint, 'station', [])),
+            self::tryGetField($checkpoint, 'arrival'),
+            self::tryGetField($checkpoint, 'departure'),
+            self::tryGetField($checkpoint, 'platform'),
             Prognosis::fromJson(self::tryGetField($checkpoint, 'prognosis'))
         );
     }

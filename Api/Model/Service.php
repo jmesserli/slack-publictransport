@@ -22,15 +22,15 @@ class Service extends Model
      */
     public function __construct($regular, $irregular)
     {
-        $this->regular   = $regular;
+        $this->regular = $regular;
         $this->irregular = $irregular;
     }
 
     public static function fromJson($service)
     {
         return new self(
-            self::tryGetField($service, "regular"),
-            self::tryGetField($service, "irregular")
+            self::tryGetField($service, 'regular'),
+            self::tryGetField($service, 'irregular')
         );
     }
 }
