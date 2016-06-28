@@ -36,7 +36,12 @@ class TransportAPI
 
         return $stations;
     }
-
+    /**
+     * @param Location $from 
+     * @param Location $to 
+     * @param string $time 
+     * @param bool $isArrivalTime 
+     */
     public function getConnections($from, $to, $time, $isArrivalTime)
     {
         $response = $this->client->request("GET", "connections", [

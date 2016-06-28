@@ -48,6 +48,7 @@ Flight::route("POST /api/v1/connections", function () use ($config) {
 
     // From this point on we know the request is coming from slack and valid
     $transportApi = new TransportAPI();
+
 });
 
 Flight::route("GET /api/v1/ping", function () {
