@@ -7,14 +7,15 @@ use PegNu\Api\Model\Location;
 class SlackHelper
 {
     /**
-	 * @param Location[] $locations
-	 * @return array
-	 */
+     * @param Location[] $locations
+     *
+     * @return array
+     */
     public static function makeLocationConfirmMessage(array $locations, $unclearLocation, $from, $to, $time)
     {
         /*
-		 * @var Location[]
-		 */
+         * @var Location[]
+         */
         $passedLocations = array_slice($locations, 0, 4, true);
 
         $actions = [];
@@ -40,23 +41,23 @@ class SlackHelper
             ],
         ];
 
-		$hash = hash("sha256", json_encode($message) . (new \DateTime)->getTimestamp());
+        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
-		$message["callback_id"] = $hash;
+        $message['callback_id'] = $hash;
 
-		$apc_store = [
-			"type" => "locationCorrection",
-			"data" => [
-				"from" => $from,
-				"to" => $to,
-				"time" => $time,
-				"locations" => $locations,
-				"message" => $message
-			]
-		];
+        $apc_store = [
+            'type' => 'locationCorrection',
+            'data' => [
+                'from'      => $from,
+                'to'        => $to,
+                'time'      => $time,
+                'locations' => $locations,
+                'message'   => $message,
+            ],
+        ];
 
-		apc_store($hash, $apc_store);
+        apc_store($hash, $apc_store);
 
-		return $message;
+        return $message;
     }
 }
