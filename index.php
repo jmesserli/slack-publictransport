@@ -55,7 +55,7 @@ Flight::route("GET /api/v1/ping", function () {
 });
 
 Flight::route("/", function () {
-    Flight::render("index.view.php", "/view");
+    Flight::render("index.view.php");
 });
 
 Flight::route("error", function (Exception $ex) use ($errorHandler) {
