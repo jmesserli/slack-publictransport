@@ -99,7 +99,7 @@ Flight::route('POST /api/v1/interactive', function () use ($config) {
     $request = Flight::request();
 
     $slackData = json_decode($request->data->payload, true);
-    $token = $slackData["token"];
+    $token = $slackData['token'];
     if ($token !== $config['slack_token']) {
         Flight::json(['status' => 'error', 'error' => 'Unauthorized'], 401);
     }
