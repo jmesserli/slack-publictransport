@@ -46,7 +46,7 @@ class SlackHelper
         // Create hash for temporary saving in apcu
         $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
-        $message['callback_id'] = $hash;
+        $message["attachments"][0]['callback_id'] = $hash;
 
         $apcu_store = [
             'type' => 'locationCorrection',
