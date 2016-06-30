@@ -41,12 +41,13 @@ class TransportAPI
     }
 
     /**
-     * @param Location $from
-     * @param Location $to
-     * @param string   $time
-     * @param bool     $isArrivalTime
+     * @param Location $from Where the connection starts
+     * @param Location $to Where the connection ends
+     * @param string   $time When the connection should depart / arrive
+     * @param bool     $isArrivalTime If $time is the arrival time or the departure time
+	 * @param int $limit How many connections should be returned at most
      */
-    public function getConnections($from, $to, $time, $isArrivalTime)
+    public function getConnections($from, $to, $time, $isArrivalTime, $limit = 3)
     {
         $response = $this->client->request('GET', 'connections', [
             'query' => [
@@ -54,6 +55,7 @@ class TransportAPI
                 'to'            => $to->id,
                 'time'          => $time,
                 'isArrivalTime' => $isArrivalTime,
+				"limit"			=> $limit
             ],
         ]);
 

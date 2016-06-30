@@ -92,8 +92,9 @@ Flight::route('POST /api/v1/interactive', function () use ($config) {
     $callbackIdHash = $slackData['callback_id'];
     $name = $slackData['actions'][0]['name'];
     $value = $slackData['actions'][0]['value'];
+	$responseUrl = $slackData["response_url"];
 
-    $interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value);
+    $interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value, $reponseUrl);
 
     if ($interactionResult) {
         Flight::json($interactionResult);
