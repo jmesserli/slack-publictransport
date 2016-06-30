@@ -6,17 +6,55 @@ use PegNu\Api\Model\Location;
 
 class SlackHelper
 {
+	/**
+	 * Handles an interactive button call
+	 *
+	 * @param string $interactionHash The 'callback_id' from slack which is used to identify the APCu value
+	 * @param string $name Name of the button pressed
+	 * @param string $value Value of the button pressed
+	 * @return bool|array
+	 */
+	public static function handleInteractiveCall($interactionHash, $name, $value)
+	{
+		$success = false;
+		$fetched = apcu_fetch($interactionHash, &$success);
+
+		if (!$success)
+			return false;
+
+		/**
+		 * @var string
+		*/
+		$type = $fetched["type"];
+
+		/**
+		 * @var array
+		 */
+		$data = $fetched["data"];
+
+		switch($type) {
+			case "locationCorrection":
+
+
+				break;
+		}
+	}
+
     /**
-     * @param Location[] $locations
-     *
-     * @return array
-     */
-    public static function makeLocationConfirmMessage(array $locations, $unclearLocation, $from, $to, $time)
+	 * @param Location[] $selectableLocations Possible locations for user input
+	 * @param string $unclearLocationStr User input
+	 * @param Location[] $from All possible from locations
+	 * @param Location[] $to All possible to locations
+	 * @param string $time The time passed by the user
+	 *
+	 * @return array
+	 */
+    public static function makeLocationConfirmMessage(array $selectableLocations, $unclearLocationStr, $from, $to, $time)
     {
-        /*
-         * @var Location[]
-         */
-        $passedLocations = array_slice($locations, 0, 4, true);
+        /**
+		 * @var Location[]
+		 */
+        $passedLocations = array_slice($selectableLocations, 0, 4, true);
 
         $actions = [];
 
@@ -33,7 +71,7 @@ class SlackHelper
 
         // Generate message with actions
         $message = [
-            'text'        => "Für _{$unclearLocation}_ gibt es verschiedene Möglichkeiten",
+            'text'        => "Für _{$unclearLocationStr}_ gibt es verschiedene Möglichkeiten",
             'attachments' => [
                 [
                     'text'    => 'Bitte wähle die gewünschte Station:',
@@ -54,12 +92,12 @@ class SlackHelper
                 'from'      => $from,
                 'to'        => $to,
                 'time'      => $time,
-                'locations' => $locations,
+                'locations' => $selectableLocations,
                 'message'   => $message,
             ],
         ];
 
-        // TTL 300s = 60s * 5 = 5 min
+        // TTL 300s = 60s * 5 = 5 min (User has 5 minutes to choose the station)
         apcu_store($hash, $apcu_store, 300);
 
         return $message;

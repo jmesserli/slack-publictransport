@@ -52,7 +52,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     $commandParameters = $request->data->text;
 
     $regexMatches = [];
-    preg_match_all('/(\\w+)|"([\\w ]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
+    preg_match_all('/(\\w+)|"([\\w ,äöüÄÖÜ]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
     $matchCount = count($regexMatches[0]);
 
     $parsedParams = [];
@@ -104,7 +104,18 @@ Flight::route('POST /api/v1/interactive', function () use ($config) {
         Flight::json(['status' => 'error', 'error' => 'Unauthorized'], 401);
     }
 
-    echo 'Not Yet Implemented';
+	$callbackIdHash = $slackData["callback_id"];
+	$name = $slackData["actions"][0]["name"];
+	$value = $slackData["actions"][0]["value"];
+
+	$interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value);
+
+	if ($interactionResult)
+	{
+		Flight::json($interactionResult);
+	} else {
+		echo "Interaction failed";
+	}
 });
 
 Flight::route('/api/v1/ping', function () {
