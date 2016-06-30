@@ -4,10 +4,13 @@ namespace PegNu;
 
 use Flight;
 use PegNu\Api\Model\Location;
+use PegNu\Api\Model\Connection;
 use PegNu\Api\TransportAPI;
 
 class SlackHelper
 {
+	private static $colors = ['#FFA05D', '#FF6550', '#FFC550', '#E8A249', '#E87349'];
+
     /**
      * Handles an interactive button call.
      *
@@ -72,9 +75,7 @@ class SlackHelper
                 $connections = $data['connections'];
                 $connection = $connections[(int) $value];
 
-
-
-                break;
+				return self::makeConnectionDetail($connection);
         }
     }
 
@@ -108,6 +109,101 @@ class SlackHelper
 
         return true;
     }
+
+	/**
+	 * Creates a slack message for a detailed connection
+	 *
+	 * @param Connection $connection The connection to display in detail
+	 *
+	 * @return array
+	 */
+	public static function makeConnectionDetail($connection) {
+
+		$attachments = [];
+
+		foreach ($connection->sections as $index => $section) {
+			$color = self::$colors[$index % (count(self::$colors) - 1)];
+
+			if ($section->walk != null) {
+				// Walking section
+				$attachments[] = [
+					"pretext" => "Fussweg",
+					"color" => "$color",
+					"fields" => [
+						[
+							"title" => "Von",
+							"value" => "{$section->departure->station->name}",
+							"short" => false
+						],
+						[
+							"title" => "Nach",
+							"value" => "{$section->arrival->station->name}",
+							"short" => true
+						],
+						[
+							"title" => "Dauer",
+							"value" => "{$section->walk}",
+							"short" => true
+						],
+					]
+				];
+			} else {
+				// Train / Bus / etc. section
+				$attachments[] = [
+					"pretext" => "{$section->journey->category} in Richtung {$section->journey->to}",
+					"color" => "$color",
+					"fields" => [
+						[
+							"title" => "Von",
+							"value" => "{$section->departure->station->name}",
+							"short" => false
+						],
+						[
+							"title" => "Perron",
+							"value" => "{$section->departure->platform}",
+							"short" => true
+						],
+						[
+							"title" => "Abfahrt",
+							"value" => "{$section->departure->departure}",
+							"short" => true
+						],
+					]
+				];
+
+				$attachments[] = [
+					"color" => "$color",
+					"fields" => [
+						[
+							"title" => "Nach",
+							"value" => "{$section->arrival->station->name}",
+							"short" => false
+						],
+						[
+							"title" => "Perron",
+							"value" => "{$section->arrival->platform}",
+							"short" => true
+						],
+						[
+							"title" => "Ankunft",
+							"value" => "{$section->arrival->arrival}",
+							"short" => true
+						],
+					]
+				];
+			}
+		}
+
+		$startSection = $connection->sections[0];
+		$endSection = $connection->sections[count($connection->sections) - 1];
+
+		$message = [
+			"text" => "Ihre Verbindung von {$startSection->departure->station->name} nach {$endSection->arrival->station->name}",
+			"attachments" => $attachments,
+		];
+
+		return $message;
+	}
 
     /**
      * Creates a connection overview from start and end locations with the next 3 connections.

@@ -44,7 +44,7 @@ class Section extends Model
     {
         return new self(
             Journey::fromJson(self::tryGetField($section, 'journey', [])),
-            self::tryGetField($section, 'walk'),
+            self::tryGetField(self::tryGetField($section, 'walk', []), 'duration'),
             Checkpoint::fromJson(self::tryGetField($section, 'departure')),
             Checkpoint::fromJson(self::tryGetField($section, 'arrival'))
         );
