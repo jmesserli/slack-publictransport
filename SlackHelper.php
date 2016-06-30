@@ -68,13 +68,13 @@ class SlackHelper
 
                 return self::makeConnectionOverview($location_from, $location_to, $data['time']);
 
-			case 'overviewSelection':
-				$connections = $data["connections"];
-				$connection = $connections[(int) $value];
+            case 'overviewSelection':
+                $connections = $data['connections'];
+                $connection = $connections[(int) $value];
 
 
 
-				break;
+                break;
         }
     }
 
@@ -180,11 +180,11 @@ class SlackHelper
         $message['attachments'][$lastAttachmentIdx]['callback_id'] = $hash;
 
         apcu_store($hash, [
-			"type" => "overviewSelection", 
-			"data" => [
-				'connections' => $connections,
-			],
-		]);
+            'type' => 'overviewSelection',
+            'data' => [
+                'connections' => $connections,
+            ],
+        ]);
 
         return $message;
     }
