@@ -46,12 +46,7 @@ class SlackHelper
                 $choose_locations = $data['locations'];
 
                 // correct location
-                $chosen_location = $choose_locations[(int) $value];
-
-                if (count($chosen_location) == 0) {
-                    echo 'Error in passed location id. Location was not in selection';
-                    exit;
-                }
+                $chosen_location = [$choose_locations[(int) $value]];
 
                 if ($data['corrected'] == 'from') {
                     $locations_from = $chosen_location;
