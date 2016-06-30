@@ -267,7 +267,7 @@ class SlackHelper
             'attachments' => $attachments,
         ];
 
-        $hash = hash('sha256', json_encode($message) . (new \DateTime())->getTimestamp());
+        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
         $lastAttachmentIdx = count($message['attachments']) - 1;
         $message['attachments'][$lastAttachmentIdx]['callback_id'] = $hash;
@@ -326,7 +326,7 @@ class SlackHelper
         ];
 
         // Create hash for temporary saving in apcu
-        $hash = hash('sha256', json_encode($message) . (new \DateTime())->getTimestamp());
+        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
         $message['attachments'][0]['callback_id'] = $hash;
 
