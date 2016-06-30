@@ -52,7 +52,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     $commandParameters = $request->data->text;
 
     $regexMatches = [];
-    preg_match_all('/(\\w+)|"([\\w ,הצüִײÜ]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
+    preg_match_all('/([\\wהצüִײÜ,]+)|"([\\w ,הצüִײÜ]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
     $matchCount = count($regexMatches[0]);
 
     $parsedParams = [];

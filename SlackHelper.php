@@ -17,7 +17,7 @@ class SlackHelper
      *
      * @return bool|array False if handling failed; else message in array form
      */
-    public static function handleInteractiveCall($interactionHash, $name, $value)
+    public static function handleInteractiveCall($interactionHash, $name, $value, $responseUrl)
     {
         $success = false;
         $fetched = apcu_fetch($interactionHash, $success);
@@ -66,8 +66,15 @@ class SlackHelper
                 $location_from = $locations_from[0];
                 $location_to = $locations_to[0];
 
-                Flight::json(self::makeConnectionOverview($location_from, $location_to, $data['time']));
-                break;
+                return self::makeConnectionOverview($location_from, $location_to, $data['time']);
+
+			case 'overviewSelection':
+				$connections = $data["connections"];
+				$connection = $connections[(int) $value];
+
+
+
+				break;
         }
     }
 
@@ -172,7 +179,12 @@ class SlackHelper
         $lastAttachmentIdx = count($message['attachments']) - 1;
         $message['attachments'][$lastAttachmentIdx]['callback_id'] = $hash;
 
-        //TODO apcu_store();
+        apcu_store($hash, [
+			"type" => "overviewSelection", 
+			"data" => [
+				'connections' => $connections,
+			],
+		]);
 
         return $message;
     }
