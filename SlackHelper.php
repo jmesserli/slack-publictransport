@@ -115,64 +115,64 @@ class SlackHelper
     {
         // TODO 'isArrivalTime'
         $connections = (new TransportApi())->getConnections($from_location, $to_location, $time, false, 3);
-		
-		$attachments = [];
-		foreach ($connections as $index => $connection) {
-			$attachments[] = [
-				"color" => "#000", // TODO better colors
-				"thumb_url" => "https://cdn.peg.nu/favicon.ico",
-				"fields" => [
-					[
-						"title" => "Abfahrt",
-						"value" => $connection->from->departure,
-						"short" => true,
-					],
-					[
-						"title" => "Ankunft",
-						"value" => $connection->to->arrival,
-						"short" => true,
-					],
-					[
-						"title" => "Linie",
-						"value" => $connection->sections[0]->journey->name,
-						"short" => true,
-					],
-					[
-						"title" => "Dauer",
-						"value" => $connection->duration,
-						"short" => true
-					]
-				]
-			];
-		}
 
-		$actions = [];
-		foreach ($connections as $index => $connection) {
-			$actions[] =  [
-				"name" => "connection", 
-				"text" => "{$connection->sections[0]->journey->name} nach {$connection->sections[0]->journey->to} um {$connection->from->departure}",
-				"type" => "button",
-				"value" => "{$index}",
-			];
-		}
+        $attachments = [];
+        foreach ($connections as $index => $connection) {
+            $attachments[] = [
+                'color'     => '#000', // TODO better colors
+                'thumb_url' => 'https://cdn.peg.nu/favicon.ico',
+                'fields'    => [
+                    [
+                        'title' => 'Abfahrt',
+                        'value' => $connection->from->departure,
+                        'short' => true,
+                    ],
+                    [
+                        'title' => 'Ankunft',
+                        'value' => $connection->to->arrival,
+                        'short' => true,
+                    ],
+                    [
+                        'title' => 'Linie',
+                        'value' => $connection->sections[0]->journey->name,
+                        'short' => true,
+                    ],
+                    [
+                        'title' => 'Dauer',
+                        'value' => $connection->duration,
+                        'short' => true,
+                    ],
+                ],
+            ];
+        }
 
-		$attachments[] = [
-			"text" => "Bitte wähle deine Verbindung:",
-			"color" => "#fff", // TODO better colors
-			"actions" => $actions
-		];
+        $actions = [];
+        foreach ($connections as $index => $connection) {
+            $actions[] = [
+                'name'  => 'connection',
+                'text'  => "{$connection->sections[0]->journey->name} nach {$connection->sections[0]->journey->to} um {$connection->from->departure}",
+                'type'  => 'button',
+                'value' => "{$index}",
+            ];
+        }
 
-		$message = [
-			"text" => "Ihre Verbindungen von *{$from_location->name} nach {$to_location->name}*:",
-			"attachments" => $attachments,
-		];
+        $attachments[] = [
+            'text'    => 'Bitte wähle deine Verbindung:',
+            'color'   => '#fff', // TODO better colors
+            'actions' => $actions,
+        ];
 
-		$hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
+        $message = [
+            'text'        => "Ihre Verbindungen von *{$from_location->name} nach {$to_location->name}*:",
+            'attachments' => $attachments,
+        ];
 
-		$lastAttachmentIdx = count($message["attachments"])-1;
-		$message["attachments"][$lastAttachmentIdx]["callback_id"] = $hash;
+        $hash = hash('sha256', json_encode($message).(new \DateTime())->getTimestamp());
 
-		//TODO apcu_store();
+        $lastAttachmentIdx = count($message['attachments']) - 1;
+        $message['attachments'][$lastAttachmentIdx]['callback_id'] = $hash;
+
+        //TODO apcu_store();
 
         return $message;
     }
