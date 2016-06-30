@@ -2,7 +2,7 @@
 
 namespace PegNu;
 
-use Flight;
+use flight;
 use PegNu\Api\Model\Connection;
 use PegNu\Api\Model\Location;
 use PegNu\Api\TransportAPI;
@@ -260,7 +260,7 @@ class SlackHelper
         }
 
         $attachments[] = [
-            'text'    => 'Bitte wähle deine Verbindung:',
+            'text'    => 'Bitte wÃ¤hle deine Verbindung:',
             'color'   => '#fff', // TODO better colors
             'actions' => $actions,
         ];

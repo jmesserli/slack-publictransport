@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use PegNu\Api\TransportAPI;
@@ -52,7 +52,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     $commandParameters = $request->data->text;
 
     $regexMatches = [];
-    preg_match_all('/([\\w‰ˆ¸ƒ÷‹,]+)|"([\\w ,‰ˆ¸ƒ÷‹]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
+    preg_match_all('/([\\w√§√∂√º√Ñ√ñ√ú,]+)|"([\\w ,√§√∂√º√Ñ√ñ√ú]+)"/', $commandParameters, $regexMatches, PREG_PATTERN_ORDER);
     $matchCount = count($regexMatches[0]);
 
     $parsedParams = [];
@@ -94,7 +94,7 @@ Flight::route('POST /api/v1/interactive', function () use ($config) {
     $value = $slackData['actions'][0]['value'];
     $responseUrl = $slackData['response_url'];
 
-    $interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value, $reponseUrl);
+    $interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value, $responseUrl);
 
     if ($interactionResult) {
         Flight::json($interactionResult);
