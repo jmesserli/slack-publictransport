@@ -17,7 +17,7 @@ class SlackHelper
 	public static function handleInteractiveCall($interactionHash, $name, $value)
 	{
 		$success = false;
-		$fetched = apcu_fetch($interactionHash, &$success);
+		$fetched = apcu_fetch($interactionHash, $success);
 
 		if (!$success)
 			return false;
