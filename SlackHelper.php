@@ -2,9 +2,9 @@
 
 namespace PegNu;
 
+use Flight;
 use PegNu\Api\Model\Location;
 use PegNu\Api\TransportAPI;
-use Flight;
 
 class SlackHelper
 {
@@ -38,93 +38,95 @@ class SlackHelper
 
         switch ($type) {
             case 'locationCorrection':
-				$locations_from = $data["from"];
-				$locations_to = $data["to"];
-				$choose_locations = $data["locations"];
+                $locations_from = $data['from'];
+                $locations_to = $data['to'];
+                $choose_locations = $data['locations'];
 
-				// correct location
-				$chosen_location = array_filter($choose_locations, function($item) use ($value) {
-					/** @var Location $item */
-					return $item->id == $value;
-				});
+                // correct location
+                $chosen_location = array_filter($choose_locations, function ($item) use ($value) {
+                    /* @var Location $item */
+                    return $item->id == $value;
+                });
 
-				if (count($chosen_location) == 0) {
-					echo "Error in passed location id. Location was not in selection";
-					exit;
-				}
+                if (count($chosen_location) == 0) {
+                    echo 'Error in passed location id. Location was not in selection';
+                    exit;
+                }
 
-				if ($data["corrected"] == 'from')
-					$locations_from = $chosen_location;
-				elseif ($data["corrected"]=='to')
-					$locations_to = $chosen_location;
+                if ($data['corrected'] == 'from') {
+                    $locations_from = $chosen_location;
+                } elseif ($data['corrected'] == 'to') {
+                    $locations_to = $chosen_location;
+                }
 
-				// trigger asking for location again
-				self::askForLocationIfUncertain($locations_from, $locations_to, $data["userFrom"], $data["userTo"], $data["time"]);
+                // trigger asking for location again
+                self::askForLocationIfUncertain($locations_from, $locations_to, $data['userFrom'], $data['userTo'], $data['time']);
 
-				// if we get here, there is no uncertainty
-				$location_from = $locations_from[0];
-				$location_to = $locations_to[0];
+                // if we get here, there is no uncertainty
+                $location_from = $locations_from[0];
+                $location_to = $locations_to[0];
 
-				self::makeConnectionOverview($location_from, $location_to, $data["time"]);
+                self::makeConnectionOverview($location_from, $location_to, $data['time']);
                 break;
         }
     }
 
-	/**
-	 * Checks if one of the locations the user entered is not specific enough. Will cancel the request if necessary
-	 *
-	 * @param Location[] $locations_from All possible 'from' locations
-	 * @param Location[] $locations_to  All possible 'to' locations
-	 * @param string $input_from User input for 'from'
-	 * @param string $input_to User input for 'to'
-	 * @param string $input_time User input for 'time'
-	 *
-	 * @return bool|null True if the locations are certain
-	 */
-	public static function askForLocationIfUncertain($locations_from, $locations_to, $input_from, $input_to, $input_time)
-	{
-		// Ask for exact location
-		if (count($locations_from) > 1) {
-			Flight::json(SlackHelper::makeLocationConfirmMessage($locations_from, $input_from, $input_to, 'from', $locations_from, $locations_to, $input_time));
-		} elseif (count($locations_from) == 0) {
-			echo "Ich kann mit _{$input_from}_ keine Station finden";
-			exit;
-		}
+    /**
+     * Checks if one of the locations the user entered is not specific enough. Will cancel the request if necessary.
+     *
+     * @param Location[] $locations_from All possible 'from' locations
+     * @param Location[] $locations_to   All possible 'to' locations
+     * @param string     $input_from     User input for 'from'
+     * @param string     $input_to       User input for 'to'
+     * @param string     $input_time     User input for 'time'
+     *
+     * @return bool|null True if the locations are certain
+     */
+    public static function askForLocationIfUncertain($locations_from, $locations_to, $input_from, $input_to, $input_time)
+    {
+        // Ask for exact location
+        if (count($locations_from) > 1) {
+            Flight::json(self::makeLocationConfirmMessage($locations_from, $input_from, $input_to, 'from', $locations_from, $locations_to, $input_time));
+        } elseif (count($locations_from) == 0) {
+            echo "Ich kann mit _{$input_from}_ keine Station finden";
+            exit;
+        }
 
-		if (count($locations_to) > 1) {
-			Flight::json(SlackHelper::makeLocationConfirmMessage($locations_to, $input_to, $input_from, 'to', $locations_from, $locations_to, $input_time));
-		} elseif (count($locations_to) == 0) {
-			echo "Ich kann mit _{$input_to}_ keine Station finden";
-			exit;
-		}
+        if (count($locations_to) > 1) {
+            Flight::json(self::makeLocationConfirmMessage($locations_to, $input_to, $input_from, 'to', $locations_from, $locations_to, $input_time));
+        } elseif (count($locations_to) == 0) {
+            echo "Ich kann mit _{$input_to}_ keine Station finden";
+            exit;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Creates a connection overview from start and end locations with the next 3 connections
-	 *
-	 * @param Location $from_location
-	 * @param Location $to_location
-	 * @param string $time
-	 *
-	 * @return array
-	 */
-	public static function makeConnectionOverview($from_location, $to_location, $time) {
-		// TODO 'isArrivalTime'
-		$connections = (new TransportApi())->getConnections($from_location, $to_location, $time, false);
+    /**
+     * Creates a connection overview from start and end locations with the next 3 connections.
+     *
+     * @param Location $from_location
+     * @param Location $to_location
+     * @param string   $time
+     *
+     * @return array
+     */
+    public static function makeConnectionOverview($from_location, $to_location, $time)
+    {
+        // TODO 'isArrivalTime'
+        $connections = (new TransportApi())->getConnections($from_location, $to_location, $time, false);
 
-		// TODO Transform connection data and set APCU
+        // TODO Transform connection data and set APCU
 
-		return [];
-	}
+        return [];
+    }
 
     /**
      * @param Location[] $selectableLocations Possible locations for user input
      * @param string     $unclearLocationStr  User input
-	 * @param string $otherLocationStr The other location passed by the user
-	 * @param string $correctedLocation The location that is getting corrected (from | to)
-	 * @param Location[] $from                All possible from locations
+     * @param string     $otherLocationStr    The other location passed by the user
+     * @param string     $correctedLocation   The location that is getting corrected (from | to)
+     * @param Location[] $from                All possible from locations
      * @param Location[] $to                  All possible to locations
      * @param string     $time                The time passed by the user
      *
@@ -170,11 +172,11 @@ class SlackHelper
         $apcu_store = [
             'type' => 'locationCorrection',
             'data' => [
-				'corrected' => $correctedLocation,
+                'corrected' => $correctedLocation,
                 'from'      => $from,
                 'to'        => $to,
-				'userFrom' => $correctedLocation == 'from' ? $unclearLocationStr : $otherLocationStr,
-				'userTo' => $correctedLocation == 'to' ? $unclearLocationStr:$otherLocationStr,
+                'userFrom'  => $correctedLocation == 'from' ? $unclearLocationStr : $otherLocationStr,
+                'userTo'    => $correctedLocation == 'to' ? $unclearLocationStr : $otherLocationStr,
                 'time'      => $time,
                 'locations' => $selectableLocations,
             ],
