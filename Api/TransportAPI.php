@@ -51,8 +51,8 @@ class TransportAPI
     {
         $response = $this->client->request('GET', 'connections', [
             'query' => [
-                'from'             => $from->id,
-                'to'               => $to->id,
+                'from'             => $from->name,
+                'to'               => $to->name,
                 'time'             => $time,
                 'isArrivalTime'    => $isArrivalTime,
                 'limit'            => $limit,
