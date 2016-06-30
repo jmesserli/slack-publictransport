@@ -74,7 +74,7 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     $locations_to = $transportApi->queryLocations($parsedParams[1]);
     $time = isset($parsedParams[2]) ? $parsedParams[2] : null;
 
-	SlackHelper::askForLocationIfUncertain($locations_from, $locations_to, $parsedParams[0], $parsedParams[1], $time);
+    SlackHelper::askForLocationIfUncertain($locations_from, $locations_to, $parsedParams[0], $parsedParams[1], $time);
 
     $overviewMessage = SlackHelper::makeConnectionOverview($locations_from[0], $locations_to[0], $time);
     Flight::json($overviewMessage);
