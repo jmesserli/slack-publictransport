@@ -74,25 +74,10 @@ Flight::route('POST /api/v1/connections', function () use ($config) {
     $locations_to = $transportApi->queryLocations($parsedParams[1]);
     $time = isset($parsedParams[2]) ? $parsedParams[2] : null;
 
-    // Ask for exact location
-    if (count($locations_from) > 1) {
-        Flight::json(SlackHelper::makeLocationConfirmMessage($locations_from, $parsedParams[0], $locations_from, $locations_to, $time));
-    } elseif (count($locations_from) == 0) {
-        echo "Ich kann mit _{$parsedParams[0]}_ keine Station finden";
-        exit;
-    }
+	SlackHelper::askForLocationIfUncertain($locations_from, $locations_to, $parsedParams[0], $parsedParams[1], $time);
 
-    if (count($locations_to) > 1) {
-        Flight::json(SlackHelper::makeLocationConfirmMessage($locations_to, $parsedParams[1], $locations_from, $locations_to, $time));
-    } elseif (count($locations_to) == 0) {
-        echo "Ich kann mit _{$parsedParams[1]}_ keine Station finden";
-        exit;
-    }
-
-    $connections = $transportApi->getConnections($locations_from[0], $locations_to[0], isset($parsedParams[2]) ? $parsedParams[2] : null, false);
-    // TODO Transform connection data and set APCU
-
-    Flight::json($connections);
+    $overviewMessage = SlackHelper::makeConnectionOverview($locations_from[0], $locations_to[0], $time);
+    Flight::json($overviewMessage);
 });
 
 Flight::route('POST /api/v1/interactive', function () use ($config) {
