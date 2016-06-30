@@ -104,18 +104,17 @@ Flight::route('POST /api/v1/interactive', function () use ($config) {
         Flight::json(['status' => 'error', 'error' => 'Unauthorized'], 401);
     }
 
-	$callbackIdHash = $slackData["callback_id"];
-	$name = $slackData["actions"][0]["name"];
-	$value = $slackData["actions"][0]["value"];
+    $callbackIdHash = $slackData['callback_id'];
+    $name = $slackData['actions'][0]['name'];
+    $value = $slackData['actions'][0]['value'];
 
-	$interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value);
+    $interactionResult = SlackHelper::handleInteractiveCall($callbackIdHash, $name, $value);
 
-	if ($interactionResult)
-	{
-		Flight::json($interactionResult);
-	} else {
-		echo "Interaction failed";
-	}
+    if ($interactionResult) {
+        Flight::json($interactionResult);
+    } else {
+        echo 'Interaction failed';
+    }
 });
 
 Flight::route('/api/v1/ping', function () {

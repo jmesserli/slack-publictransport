@@ -6,54 +6,56 @@ use PegNu\Api\Model\Location;
 
 class SlackHelper
 {
-	/**
-	 * Handles an interactive button call
-	 *
-	 * @param string $interactionHash The 'callback_id' from slack which is used to identify the APCu value
-	 * @param string $name Name of the button pressed
-	 * @param string $value Value of the button pressed
-	 * @return bool|array
-	 */
-	public static function handleInteractiveCall($interactionHash, $name, $value)
-	{
-		$success = false;
-		$fetched = apcu_fetch($interactionHash, $success);
+    /**
+     * Handles an interactive button call.
+     *
+     * @param string $interactionHash The 'callback_id' from slack which is used to identify the APCu value
+     * @param string $name            Name of the button pressed
+     * @param string $value           Value of the button pressed
+     *
+     * @return bool|array
+     */
+    public static function handleInteractiveCall($interactionHash, $name, $value)
+    {
+        $success = false;
+        $fetched = apcu_fetch($interactionHash, $success);
 
-		if (!$success)
-			return false;
+        if (!$success) {
+            return false;
+        }
 
-		/**
-		 * @var string
-		*/
-		$type = $fetched["type"];
+        /*
+         * @var string
+        */
+        $type = $fetched['type'];
 
-		/**
-		 * @var array
-		 */
-		$data = $fetched["data"];
+        /*
+         * @var array
+         */
+        $data = $fetched['data'];
 
-		switch($type) {
-			case "locationCorrection":
+        switch ($type) {
+            case 'locationCorrection':
 
 
-				break;
-		}
-	}
+                break;
+        }
+    }
 
     /**
-	 * @param Location[] $selectableLocations Possible locations for user input
-	 * @param string $unclearLocationStr User input
-	 * @param Location[] $from All possible from locations
-	 * @param Location[] $to All possible to locations
-	 * @param string $time The time passed by the user
-	 *
-	 * @return array
-	 */
+     * @param Location[] $selectableLocations Possible locations for user input
+     * @param string     $unclearLocationStr  User input
+     * @param Location[] $from                All possible from locations
+     * @param Location[] $to                  All possible to locations
+     * @param string     $time                The time passed by the user
+     *
+     * @return array
+     */
     public static function makeLocationConfirmMessage(array $selectableLocations, $unclearLocationStr, $from, $to, $time)
     {
-        /**
-		 * @var Location[]
-		 */
+        /*
+         * @var Location[]
+         */
         $passedLocations = array_slice($selectableLocations, 0, 4, true);
 
         $actions = [];
