@@ -11,5 +11,10 @@
          srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"/>
 </a>
 
+<br>
+
+<div data-theme="default" data-height="155" data-width="400" data-github="jmesserli/slack-publictransport" class="github-card"></div>
+<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
+
 </body>
 </html>
