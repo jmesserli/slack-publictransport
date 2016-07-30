@@ -8,7 +8,8 @@ use PegNu\Api\Model\Location;
 
 class TransportAPI
 {
-    private $client, $baseUrl = 'http://transport.opendata.ch/v1/';
+    private $client;
+    private $baseUrl = 'http://transport.opendata.ch/v1/';
 
     public function __construct()
     {
